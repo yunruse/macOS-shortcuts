@@ -1,7 +1,9 @@
 '''
 Tool for manipulating macOS keyboard shortcuts.
 
-Currently only does basic output.
+Finds all custom keyboard shortcuts and outputs a simple .json file.
+
+No support for the opposite (ie "installing" a .json file) as of yet.
 '''
 
 from os import listdir
@@ -10,23 +12,24 @@ import plistlib
 import json
 from sys import stderr
 
+from argparse import ArgumentParser
+
+parser = ArgumentParser(description=__doc__)
+parser.add_argument('--verbose', '-v', action="store_true", help="Output to stderr any info messages which are not errors.")
 
 class Shortcut(str):
-    '''
-    Some key combination that would be stored in a .plist.
-    '''
-    # TODO: fancy display & conversion -- function keys don't look nice
+    '''Some key combination as stored in .plist files'''
+    # TODO: more user-friendly conversion -- function keys are private use Unicode for example
+    #       try emulating vs-code style perhaps
 
 AppShortcuts = dict[Shortcut, str]
 
 class AppName(str):
-    '''
-    Some application name, e.g. com.apple.Music
-    '''
-    # TODO: is it possible to convert?
+    '''Some application name, e.g. com.apple.Music'''
+    # TODO: is it possible to reversibly convert to proper app names or paths?
 
 
-def plist_shortcuts():
+def plist_shortcuts(verbose=False):
     PREFS = expanduser('~/Library/Preferences')
 
     shortcuts: dict[str, AppShortcuts] = {}
@@ -38,15 +41,17 @@ def plist_shortcuts():
             with open(join(PREFS, path), 'rb') as f:
                 appShortcuts = plistlib.load(f).get('NSUserKeyEquivalents', None)
         except (plistlib.InvalidFileException, PermissionError) as e:
-            print('{}: {}'.format(path, e.args[-1]), file=stderr)
+            if verbose:
+                print('{}: {}'.format(path, e.args[-1]), file=stderr)
             continue
             
-        if appShortcuts is not None:
+        if appShortcuts:
             appName = AppName(path.replace('.plist', ''))
             shortcuts[appName] = {Shortcut(v): k for k, v in appShortcuts.items()}
     
     return shortcuts
 
 if __name__ == '__main__':
-    plists = plist_shortcuts()
+    args = parser.parse_args()
+    plists = plist_shortcuts(verbose=args.verbose)
     print(json.dumps(plists, indent=2))
