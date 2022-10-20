@@ -52,6 +52,7 @@ def plist_shortcuts(verbose=False):
     return shortcuts
 
 if __name__ == '__main__':
+    # TODO: Import as well as export
     args = parser.parse_args()
     plists = plist_shortcuts(verbose=args.verbose)
     print(json.dumps(plists, indent=2))
