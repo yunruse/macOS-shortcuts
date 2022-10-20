@@ -22,7 +22,7 @@ class Shortcut(str):
     # TODO: more user-friendly conversion -- function keys are private use Unicode for example
     #       try emulating vs-code style perhaps
 
-AppShortcuts = dict[Shortcut, str]
+AppShortcuts = dict[str, Shortcut]
 
 class AppName(str):
     '''Some application name, e.g. com.apple.Music'''
@@ -47,7 +47,7 @@ def plist_shortcuts(verbose=False):
             
         if appShortcuts:
             appName = AppName(path.replace('.plist', ''))
-            shortcuts[appName] = {Shortcut(v): k for k, v in appShortcuts.items()}
+            shortcuts[appName] = {k: Shortcut(v) for k, v in appShortcuts.items()}
     
     return shortcuts
 
