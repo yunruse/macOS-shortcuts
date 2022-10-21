@@ -1,19 +1,27 @@
 {
-    "MODIFIERS": {
-        "shift": {"code": "$", "display": "⇧"},
-        "control": {"code": "$", "display": "⇧"},
-        "option": {"code": "$", "display": "⇧"},
-        "command": {"code": "$", "display": "⇧"}
-    },
-    "KEYS": {
-        "TODO": "format like above bc of func keys :)",
-        "left": "←",
-        "up": "↑",
-        "right": "→",
-        "down": "↓",
-        "tab": "⇥",
-        "enter": "↩",
-        "escape": "⎋",
-        "": "FUNCTION KEYS ALSO TODO THANKS"
-    }
+    "$": "shift+",
+    "^": "control+",
+    "~": "option+",
+    "@": "command+",
+
+    "↑": "up",
+    "←": "left",
+    "→": "right",
+    "↓": "down",
+    "⇥": "tab",
+    "↩": "enter",
+    "⎋": "escape",
+
+    "": "f1",
+    "": "f2",
+    "": "f3",
+    "": "f4",
+    "": "f5",
+    "": "f6",
+    "": "f7",
+    "": "f8",
+    "": "f9",
+    "": "f10",
+    "": "f11",
+    "": "f12"
 }

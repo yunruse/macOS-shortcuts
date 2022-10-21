@@ -12,26 +12,30 @@ import plistlib
 import json
 from sys import stderr
 
-from argparse import ArgumentParser
+# shortcut niceties
 
-parser = ArgumentParser(description=__doc__)
-parser.add_argument('--verbose', '-v', action="store_true", help="Output to stderr any info messages which are not errors.")
+with open('codes.json') as f:
+    CODES = json.load(f)
 
-class Shortcut(str):
-    '''Some key combination as stored in .plist files'''
-    # TODO: more user-friendly conversion -- function keys are private use Unicode for example
-    #       try emulating vs-code style perhaps
+def to_vscode(string):
+    for a, b in CODES.items():
+        string = string.replace(a, b)
+    return string
 
-AppShortcuts = dict[str, Shortcut]
+def from_vscode(string):
+    for a, b in CODES.items():
+        string = string.replace(b, a)
+    return string
 
-def plist_shortcuts(verbose=False):
+# plist handling
+
+def plist_shortcuts(verbose=False, raw=False):
     PREFS = expanduser('~/Library/Preferences')
 
-    shortcuts: dict[str, AppShortcuts] = {}
+    shortcuts: dict[str, dict[str, str]] = {}
     for path in listdir(PREFS):
         if not path.endswith('.plist'):
             continue
-        appShortcuts: dict[str, str]
         try:
             with open(join(PREFS, path), 'rb') as f:
                 appShortcuts = plistlib.load(f).get('NSUserKeyEquivalents', None)
@@ -42,12 +46,25 @@ def plist_shortcuts(verbose=False):
             
         if appShortcuts:
             appName = path.replace('.plist', '')
-            shortcuts[appName] = {k: Shortcut(v) for k, v in appShortcuts.items()}
+            shortcuts[appName] = {
+                k: v if raw else to_vscode(v)
+                for k, v in appShortcuts.items()}
     
     return shortcuts
+
+# argument parsing
+
+from argparse import ArgumentParser
+
+parser = ArgumentParser(description=__doc__)
+parser.add_argument('--verbose', '-v', action="store_true",
+    help="Output to stderr any info messages which are not errors.")
+parser.add_argument('--raw', '-r', action="store_true",
+    help="Output shortcuts as stored in .plist, rather than in an ASCII vscode format."
+    " Note that some characters may be unprintable")
 
 if __name__ == '__main__':
     # TODO: Import as well as export
     args = parser.parse_args()
-    plists = plist_shortcuts(verbose=args.verbose)
+    plists = plist_shortcuts(verbose=args.verbose, raw=args.raw)
     print(json.dumps(plists, indent=2))

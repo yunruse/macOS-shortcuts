@@ -12,14 +12,14 @@ With no input, outputs the current shortcuts to stdout in JSON format. For examp
 $ python macOS-shortcuts.py
 {
   "com.apple.Safari": {
-    "Pin Tab": "@p",
-    "Unpin Tab": "@p"
+    "Pin Tab": "command+p",
+    "Unpin Tab": "command+p"
   },
   ".GlobalPreferences": {
-    "System Settings\u2026": "^,",
+    "System Settings\u2026": "control+,",
   },
   "com.apple.finder": {
-    "Rename": "@r"
+    "Rename": "command+r"
   }
 }
 ```
