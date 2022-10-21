@@ -1,0 +1,19 @@
+{
+    "MODIFIERS": {
+        "shift": {"code": "$", "display": "⇧"},
+        "control": {"code": "$", "display": "⇧"},
+        "option": {"code": "$", "display": "⇧"},
+        "command": {"code": "$", "display": "⇧"}
+    },
+    "KEYS": {
+        "TODO": "format like above bc of func keys :)",
+        "left": "←",
+        "up": "↑",
+        "right": "→",
+        "down": "↓",
+        "tab": "⇥",
+        "enter": "↩",
+        "escape": "⎋",
+        "": "FUNCTION KEYS ALSO TODO THANKS"
+    }
+}

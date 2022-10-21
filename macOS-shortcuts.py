@@ -24,11 +24,6 @@ class Shortcut(str):
 
 AppShortcuts = dict[str, Shortcut]
 
-class AppName(str):
-    '''Some application name, e.g. com.apple.Music'''
-    # TODO: is it possible to reversibly convert to proper app names or paths?
-
-
 def plist_shortcuts(verbose=False):
     PREFS = expanduser('~/Library/Preferences')
 
@@ -46,7 +41,7 @@ def plist_shortcuts(verbose=False):
             continue
             
         if appShortcuts:
-            appName = AppName(path.replace('.plist', ''))
+            appName = path.replace('.plist', '')
             shortcuts[appName] = {k: Shortcut(v) for k, v in appShortcuts.items()}
     
     return shortcuts
